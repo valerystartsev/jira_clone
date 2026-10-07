@@ -10,3 +10,6 @@
 # production
 **/build
 **/npm-debug.log*
+
+# Cypress recordings
+client/cypress/videos/
