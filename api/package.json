@@ -8,6 +8,7 @@
     "start:test": "cross-env NODE_ENV='test' DB_DATABASE='jira_test' npm start",
     "start:production": "pm2 start --name 'jira_api' node -- -r ./tsconfig-paths.js build/index.js",
     "build": "cd src && tsc",
+    "test:api": "cross-env NODE_ENV=test DB_DATABASE=jira_api_test TS_NODE_FILES=true node --test --test-concurrency=1 -r ts-node/register -r tsconfig-paths/register test/*.test.js",
     "pre-commit": "lint-staged"
   },
   "dependencies": {
@@ -44,6 +45,7 @@
     "lint-staged": "^9.4.3",
     "nodemon": "^2.0.0",
     "prettier": "^1.19.1",
+    "supertest": "^7.3.1",
     "ts-node": "^8.5.2",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.2"

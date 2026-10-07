@@ -1,6 +1,7 @@
 import { Project } from 'entities';
 import { catchErrors } from 'errors';
 import { findEntityOrThrow, updateEntity } from 'utils/typeorm';
+import { assertAllowedFields } from 'utils/access';
 import { issuePartial } from 'serializers/issues';
 
 export const getProjectWithUsersAndIssues = catchErrors(async (req, res) => {
@@ -16,6 +17,7 @@ export const getProjectWithUsersAndIssues = catchErrors(async (req, res) => {
 });
 
 export const update = catchErrors(async (req, res) => {
+  assertAllowedFields(req.body, ['name', 'url', 'description', 'category']);
   const project = await updateEntity(Project, req.currentUser.projectId, req.body);
   res.respond({ project });
 });
