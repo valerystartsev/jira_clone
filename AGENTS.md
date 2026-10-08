@@ -16,9 +16,12 @@
 
 - `npm run install-dependencies` устанавливает зависимости корневого проекта, API и клиента.
 - `npm run build` собирает API на TypeScript и клиентский Webpack-бандл для production.
-- `cd api && npm start` запускает API в режиме наблюдения; `cd client && npm start` запускает сервер разработки Webpack по адресу `http://localhost:8080`.
-- `cd client && npm run test:jest` запускает тесты Jest.
-- Создайте базы PostgreSQL `jira_development` и `jira_test`, настройте `api/.env` по образцу `.env.example`, затем выполните `cd api && npm run start:test` и `cd client && npm run test:cypress` для запуска сквозных тестов Cypress.
+- Используйте Node 24. Создайте базы PostgreSQL `jira_development`, `jira_api_test` и `jira_test`, настройте `api/.env` по образцу `api/.env.example`.
+- `npm run start:dev` запускает API на `http://localhost:3000` и клиент на `http://localhost:8080`.
+- `npm run test:api` запускает HTTP-тесты API с Supertest на отдельной базе `jira_api_test`; запущенные серверы не нужны.
+- `npm run test:jest` запускает клиентский Jest; сейчас файлов тестов Jest нет, команда успешно сообщает о 0 тестах.
+- Для Cypress запустите `npm run start:cypress` в одном терминале, дождитесь готовности серверов и выполните `npm run test:cypress` (без интерфейса) или `npm run test:cypress:open` (с интерфейсом) в другом. Cypress использует `jira_test`. Для WSL/Linux при отсутствии `libXss.so.1` установите пакет `libxss1`.
+- Для остановки API и клиента нажмите `Ctrl+C` в терминале с `start:dev` или `start:cypress`. При раздельном запуске остановите каждый процесс в его терминале; окно Cypress закройте отдельно. PostgreSQL останавливайте отдельно только при необходимости.
 
 ## Стиль кода и соглашения об именовании
 
@@ -26,7 +29,7 @@
 
 ## Рекомендации по тестированию
 
-Называйте спецификации Cypress по пользовательскому сценарию, например `issueCreate.spec.js`. Добавляйте сценарии в `client/cypress/integration`; при необходимости сбрасывайте или заполняйте тестовую базу данных. Основное покрытие обеспечивают сквозные тесты Cypress; Jest доступен для модульных тестов клиента.
+Называйте спецификации Cypress по пользовательскому сценарию, например `issueCreate.spec.js`. Добавляйте сценарии в `client/cypress/integration`; при необходимости сбрасывайте или заполняйте тестовую базу данных. HTTP-тесты API находятся в `api/test` и сбрасывают только `jira_api_test`. Jest настроен для модульных тестов клиента, но таких тестов пока нет.
 
 ## Коммиты и запросы на включение изменений
 

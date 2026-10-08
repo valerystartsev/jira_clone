@@ -7,15 +7,21 @@
     "pre-commit": "cd api && npm run pre-commit && cd ../client && npm run pre-commit",
     "install-dependencies": "npm install && cd api && npm install && cd ../client && npm install",
     "build": "cd api && npm run build && cd ../client && npm run build",
+    "start:dev": "concurrently --kill-others --names api,client \"npm --prefix api start\" \"npm --prefix client start\"",
+    "start:cypress": "concurrently --kill-others --names api,client \"npm --prefix api run start:test\" \"npm --prefix client run start:cypress\"",
+    "test:api": "npm --prefix api run test:api",
+    "test:jest": "npm --prefix client run test:jest",
+    "test:cypress": "npm --prefix client run test:cypress:run --",
+    "test:cypress:open": "npm --prefix client run test:cypress",
     "start:production": "cd api && npm run start:production && cd ../client && npm run start:production"
   },
   "devDependencies": {
+    "concurrently": "^9.2.4",
     "husky": "^4.0.0-beta.5"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run pre-commit"
     }
-  },
-  "dependencies": {}
+  }
 }

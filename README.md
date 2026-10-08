@@ -28,21 +28,46 @@ There are many showcase/example React projects out there but most of them are wa
 - Client written in Babel powered JavaScript
 - API written in TypeScript and using TypeORM
 
-## Setting up development environment 🛠
+## Development and tests 🛠
 
-- Install [postgreSQL](https://www.postgresql.org/) if you don't have it already and create a database named `jira_development`.
-- `git clone https://github.com/oldboyxx/jira_clone.git`
-- Create an empty `.env` file in `/api`, copy `/api/.env.example` contents into it, and fill in your database username and password.
-- `npm run install-dependencies`
-- `cd api && npm start`
-- `cd client && npm start` in another terminal tab
-- App should now be running on `http://localhost:8080/`
+Use Node 24 and PostgreSQL. Run the following commands from the repository root. First install
+dependencies with `npm run install-dependencies`. Create `api/.env` from `api/.env.example`, and set
+the PostgreSQL username and password there. Create three databases owned by that user:
 
-## Running cypress end-to-end tests 🚥
+| Database | Used by |
+| --- | --- |
+| `jira_development` | Local development |
+| `jira_api_test` | API HTTP tests |
+| `jira_test` | Cypress end-to-end tests |
 
-- Set up development environment
-- Create a database named `jira_test` and start the api with `cd api && npm run start:test`
-- `cd client && npm run test:cypress`
+Keep these databases separate: the API tests reset `jira_api_test`, and Cypress changes data in
+`jira_test`. Never commit `api/.env`.
+
+Start the application with `npm run start:dev`. It starts the API on `http://localhost:3000` and the
+client on `http://localhost:8080`. Leave this terminal open while using the app.
+
+### Run tests
+
+| Tests | Command | Servers required |
+| --- | --- | --- |
+| API HTTP tests (Supertest and Node test runner) | `npm run test:api` | None; requires PostgreSQL and `jira_api_test` |
+| Client Jest tests | `npm run test:jest` | None; currently no Jest test files, so it reports 0 tests |
+| Cypress headless browser tests | `npm run test:cypress` | Run `npm run start:cypress` first in another terminal |
+| Cypress interactive browser tests | `npm run test:cypress:open` | Run `npm run start:cypress` first in another terminal; requires a desktop display |
+
+`npm run start:cypress` starts the API against `jira_test` and the client in Cypress-compatible
+development mode. Wait for both servers to be ready before running Cypress. Use a new terminal for
+the test command. To run one spec, use
+`npm run test:cypress -- --spec cypress/integration/issueCreate.spec.js`.
+On WSL/Linux, Cypress also needs the system library `libXss.so.1`; if it is
+missing, install the `libxss1` package (for Ubuntu/Debian: `sudo apt install libxss1`).
+
+### Stop everything
+
+Press **Ctrl+C** in the terminal running `start:dev` or `start:cypress`. The combined command stops
+both API and client. If you started them in separate terminals, press **Ctrl+C** in each terminal;
+also close the Cypress window if it is open. PostgreSQL is a separate system service and keeps
+running. Stop it separately only if you want to shut down the database service too.
 
 ## What's missing?
 
@@ -60,9 +85,11 @@ We currently auto create an auth token and seed a project with issues and users 
 
 Not all components have properly defined [aria attributes](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA), visual focus indicators etc. Most early stage companies tend to ignore this aspect of their product but in many cases they shouldn't, especially once their userbase starts growing.
 
-### Unit/Integration tests 🧪
+### More test coverage 🧪
 
-Both Client and API are currently tested through [end-to-end Cypress tests](https://github.com/oldboyxx/jira_clone/tree/master/client/cypress/integration). That's good enough for a relatively simple application such as this, even if it was a real product. However, as the app grows in complexity, it might be wise to start writing additional unit/integration tests.
+The API has HTTP tests in `api/test`, and browser flows have Cypress specs in
+`client/cypress/integration`. Jest is configured for client unit tests, but no Jest test files have
+been added yet.
 
 ## Contributing
 

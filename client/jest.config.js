@@ -1,4 +1,5 @@
 module.exports = {
+  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/cypress/'],
   moduleFileExtensions: ['*', 'js', 'jsx'],
   moduleDirectories: ['src', 'node_modules'],
   moduleNameMapper: {

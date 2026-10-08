@@ -5,9 +5,11 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server",
+    "start:cypress": "webpack-dev-server --no-inline",
     "start:production": "pm2 start --name 'jira_client' server.js",
-    "test:jest": "jest",
+    "test:jest": "jest --runInBand --passWithNoTests",
     "test:cypress": "node_modules/.bin/cypress open",
+    "test:cypress:run": "node_modules/.bin/cypress run --config video=false",
     "build": "rm -rf build && webpack --config webpack.config.production.js --progress",
     "pre-commit": "lint-staged"
   },

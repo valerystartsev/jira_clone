@@ -3,9 +3,10 @@
 ## API tests
 
 Create a dedicated PostgreSQL database named `jira_api_test` using the credentials in `api/.env`,
-then run `cd api && npm run test:api` from the repository root. The HTTP tests use Supertest and
-Node's built-in test runner. They reset only `jira_api_test`, so they can run separately from Cypress,
-which uses `jira_test`. Use Node 24 for the test runner.
+then run `npm run test:api` from the repository root. The HTTP tests use Supertest and Node's
+built-in test runner. They reset only `jira_api_test`, so they can run separately from Cypress,
+which uses `jira_test`. Use Node 24 for the test runner. See the root README for all test commands
+and instructions for starting and stopping the servers.
 
 The API codebase is fairly simple and should be easy enough to understand.
 
